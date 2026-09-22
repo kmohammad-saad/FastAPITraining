@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel #pydantic library is used to validate the data and also to create the model for the request body
 app = FastAPI() 
 @app.get("/")
 def home():
@@ -24,3 +25,13 @@ def get_result(usn):
 @app.get("/candidate/{rollno}")
 def get_candidate(rollno):
     return {"Result":"Distinction","rollno":rollno,"type":str(type(rollno))}
+#pydantic model
+class item(BaseModel):
+    name:str
+    price:float
+    in_stock:bool = True
+
+@app.post("/item")
+def create_item(item:item):
+    return{"received":item, "total_price":item.price*1.18} #adding tax of 18% to the price
+     
